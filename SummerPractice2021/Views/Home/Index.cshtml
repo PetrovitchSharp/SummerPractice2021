@@ -1,8 +1,60 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Лента новостей";
+}
+@model News
+
+@if (true)
+{
+    <form asp-controller="Home" asp-action="AddNewPost" method="post" enctype="multipart/form-data">
+        <div>
+            <span>Добавление новой записи</span>
+        </div>
+        <div>
+            <label>Введите текст</label>
+            <input type="text" asp-for="Text" placeholder="Текст" />
+            <input type="file" accept=".jpg,.jpeg,.png" class="hidden" name="imageData" />
+            @if (ViewBag.FileError != null && ViewBag.FileError)
+            {
+                <label style="color: red">Неверный формат файла с изображением</label>
+            }
+            <input type="submit" />
+        </div>
+    </form>
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div>
+    @foreach (var post in ViewBag.Posts)
+    {
+        <div style="border: solid; border-width: 1">
+            <div>
+                @if (Guid.Empty != post.Author.Photo)
+                {
+                    <img src="@post.Author.Photo" height="30" style="border-radius: 50%" />
+                }
+                else
+                {
+                    <img src="/img/defaultIcon.png" height="30" style="border-radius: 50%" />
+                }
+                <label>@post.Author.Nickname</label>
+                <label>@post.CreateDateLabel</label>
+            </div>
+            <div>
+                @if (!String.IsNullOrEmpty(post.Text))
+                {
+                    <label>@post.Text</label>
+                }
+                @if (Guid.Empty != post.Photo)
+                {
+                    var photoUrl = SummerPractice2021.Helpers.ImageHelper.GetUrl(post.Photo);
+                    @if (photoUrl != null)
+                    {
+                        <div>
+                            <img src="@Url.Content(photoUrl)" width="50" />
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+    }
 </div>

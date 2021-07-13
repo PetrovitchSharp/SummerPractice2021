@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Регистрация";
+}
+@model UserViewModel
+
+<h1>Регистрация</h1>
+
+<form asp-controller="Home" asp-action="AddNewPost" method="post" enctype="multipart/form-data">
+    <div>
+        <span>Добавление новой записи</span>
+    </div>
+
+    <div>
+        <label asp-for="Nickname">Псевдоним</label>
+        <input type="text" asp-for="Nickname" />
+    </div>
+
+    <div>
+        <label asp-for="Email">Почта</label>
+        <input type="email" asp-for="Email" placeholder="example@ex.ru" />
+    </div>
+
+    <div>
+        <label asp-for="Password">Пароль</label>
+        <input type="password" asp-for="Password" />
+    </div>
+
+    <div>
+        <label asp-for="CheckPassword">Подтвердите пароль</label>
+        <input type="password" asp-for="CheckPassword" />
+    </div>
+
+    <div>
+        <label asp-for="LastName">Фамилия</label>
+        <input type="text" asp-for="LastName" />
+    </div>
+
+    <div>
+        <label asp-for="FirstName">Имя</label>
+        <input type="text" asp-for="FirstName" />
+    </div>
+
+    <div>
+        <label asp-for="Photo">Выберите фото</label>
+        <input type="file" accept=".jpg,.jpeg,.png" class="hidden" name="imageData" />
+    </div>
+
+    <div>
+        <label asp-for="Contacts">Контактная информация</label>
+        <input type="text" asp-for="Contacts" />
+    </div>
+
+    <div>
+        <label asp-for="AboutMe">О себе</label>
+        <input type="text" asp-for="AboutMe" />
+    </div>
+
+    <div>
+        <label asp-for="Achievements">Достижения</label>
+        <input type="text" asp-for="Achievements" />
+    </div>
+
+    <input type="submit" />
+</form>
+
