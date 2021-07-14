@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,6 +24,7 @@ namespace SummerPractice2021.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddNewPost(News news, IFormFile imageData)
         {
@@ -83,7 +85,20 @@ namespace SummerPractice2021.Controllers
             {
                 ViewBag.Posts = news;
             }
-            
+
+            if (HttpContext.User.Claims.Any())
+            {
+                var claim = HttpContext.User.Claims.First().Value;
+
+                var user = context.Users.First(user => user.Nickname == claim);
+
+                if (user.Photo.HasValue && Guid.Empty != user.Photo.Value)
+                {
+                    HttpContext.Session.SetString("Photo", user.Photo.Value.ToString());
+                }
+                HttpContext.Session.SetString("Nickname", user.Nickname);
+            }
+
             return View();
         }
 

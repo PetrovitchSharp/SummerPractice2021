@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 
 namespace SummerPractice2021.Models
 {
-	public class UserViewModel: User
+	public class LoginViewModel
 	{
-        [Required]
+		[Required]
+		[MaxLength(20)]
+		public string Nickname { get; set; }
+
+		[Required]
 		[MaxLength(20)]
 		[MinLength(6)]
-		public string CheckPassword { get; set; }
+		public string Password { get; set; }
+
+		public bool RememberMe { get; set; }
 	}
 }

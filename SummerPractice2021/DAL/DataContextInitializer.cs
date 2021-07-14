@@ -14,8 +14,8 @@ namespace SummerPractice2021.DAL
             {
                 var user = new User()
                 {
-                    Nickname = "admin",
-                    Password = "admin",
+                    Nickname = "admin666",
+                    Password = "admin666",
                     Email = "admin@mail.ru",
                     FirstName = "Petr",
                     LastName = "Korchagin"

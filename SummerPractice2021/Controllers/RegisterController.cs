@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SummerPractice2021.DAL;
+using SummerPractice2021.Helpers;
 using SummerPractice2021.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,7 +22,7 @@ namespace SummerPractice2021.Controllers
 			_logger = logger;
 		}
 
-		public IActionResult Index()
+		public IActionResult Register()
 		{
 			return View();
 		}
@@ -29,10 +32,78 @@ namespace SummerPractice2021.Controllers
         {
             var context = new DataContext();
 
-            
-            context.SaveChanges();
+			var hasUserWithNickname = context.Users.Any(x => x.Nickname == user.Nickname);
+			var hasUserWithEmail = context.Users.Any(x => x.Email == user.Email);
 
-            return View("Index");
-        }
+			var flag = false;
+
+			if (user.Password != user.CheckPassword)
+			{
+				ModelState.AddModelError("CheckPassword", "Пароли не совпадают");
+				flag = true;
+			}
+
+			if (String.IsNullOrEmpty(user.Email) || String.IsNullOrEmpty(user.Nickname) || String.IsNullOrEmpty(user.Password) || String.IsNullOrEmpty(user.CheckPassword))
+			{
+				ModelState.AddModelError(string.Empty, "Заполнены не все обязательные поля!");
+				flag = true;
+			}
+
+			if (hasUserWithNickname)
+			{
+				ModelState.AddModelError("Nickname", "Такой псевдоним уже занят");
+				flag = true;
+			}
+
+			if (hasUserWithEmail)
+			{
+				ModelState.AddModelError("Email", "Такая почта уже зарегистрирована");
+				flag = true;
+			}
+
+			if (flag)
+			{
+				return View("Register", user);
+			}
+
+			Guid? img = Guid.Empty;
+
+			if (imageData != null)
+			{
+				var extention = Path.GetExtension(imageData.FileName);
+				if (extention != ".jpg" && extention != ".jpeg" && extention != ".png")
+				{
+					ViewBag.FileError = true;
+					return View("Register", user);
+				}
+				img = await ImageHelper.UploadImage(imageData);
+			}
+
+			var validatedUser = new User()
+			{
+				Nickname = user.Nickname,
+				Password = user.Password,
+				Email = user.Email,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				Photo = img,
+				Achievements = user.Achievements,
+				AboutMe = user.AboutMe,
+				Contacts = user.Contacts
+			};
+
+			context.Users.Add(validatedUser);
+			context.SaveChanges();
+
+			await AuthenticationHelper.Authenticate(user.Nickname, true, HttpContext); // аутентификация
+
+			if (user.Photo.HasValue && Guid.Empty != user.Photo.Value)
+			{
+				HttpContext.Session.SetString("Photo", user.Photo.Value.ToString());
+			}
+			HttpContext.Session.SetString("Nickname", user.Nickname);
+
+			return RedirectToAction("Index", "Home");
+		}
     }
 }

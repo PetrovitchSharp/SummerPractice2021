@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Авторизация";
+}
+@model LoginViewModel
+
+<form asp-controller="User" asp-action="Login" method="post" enctype="multipart/form-data">
+    <div>
+        <span>Авторизация</span>
+    </div>
+
+    <div>
+        <label asp-for="Nickname">Псевдоним</label>
+        <input type="text" asp-for="Nickname" />
+    </div>
+
+    <div>
+        <label asp-for="Password">Пароль</label>
+        <input type="password" asp-for="Password" />
+    </div>
+
+    <div>
+        <label asp-for="RememberMe">Запомнить пароль</label>
+        <input type="checkbox" asp-for="RememberMe" />
+    </div>
+
+    <div>
+        <div class="validation" asp-validation-summary="ModelOnly"></div> 
+        <input type="submit" />
+    </div>
+
+</form>
+
+<div>
+    <p>Нет аккаунта?</p>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Register" asp-action="Register">Зарегистрироваться</a>
+</div>

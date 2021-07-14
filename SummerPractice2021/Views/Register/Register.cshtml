@@ -3,21 +3,21 @@
 }
 @model UserViewModel
 
-<h1>Регистрация</h1>
-
-<form asp-controller="Home" asp-action="AddNewPost" method="post" enctype="multipart/form-data">
+<form asp-controller="Register" asp-action="AddNewUser" method="post" enctype="multipart/form-data">
     <div>
-        <span>Добавление новой записи</span>
+        <span>Регистрация нового пользователя</span>
     </div>
 
     <div>
         <label asp-for="Nickname">Псевдоним</label>
         <input type="text" asp-for="Nickname" />
+        <span asp-validation-for="Nickname"></span>
     </div>
 
     <div>
         <label asp-for="Email">Почта</label>
         <input type="email" asp-for="Email" placeholder="example@ex.ru" />
+        <span asp-validation-for="Email"></span>
     </div>
 
     <div>
@@ -28,6 +28,7 @@
     <div>
         <label asp-for="CheckPassword">Подтвердите пароль</label>
         <input type="password" asp-for="CheckPassword" />
+        <span asp-validation-for="CheckPassword"></span>
     </div>
 
     <div>
@@ -43,6 +44,10 @@
     <div>
         <label asp-for="Photo">Выберите фото</label>
         <input type="file" accept=".jpg,.jpeg,.png" class="hidden" name="imageData" />
+        @if (ViewBag.FileError != null && ViewBag.FileError)
+        {
+            <label style="color: red">Неверный формат файла с изображением</label>
+        }
     </div>
 
     <div>
@@ -60,6 +65,15 @@
         <input type="text" asp-for="Achievements" />
     </div>
 
-    <input type="submit" />
+    <div>
+        <p>* - поля, обязательные для заполнения</p>
+        <input type="submit" />
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+    </div>
+    
 </form>
 
+<div>
+    <p>Уже есть аккаунт?</p>
+    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Войти</a>
+</div>

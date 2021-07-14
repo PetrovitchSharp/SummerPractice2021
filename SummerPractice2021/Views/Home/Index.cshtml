@@ -3,7 +3,7 @@
 }
 @model News
 
-@if (true)
+@if (User.Identity.IsAuthenticated)
 {
     <form asp-controller="Home" asp-action="AddNewPost" method="post" enctype="multipart/form-data">
         <div>
@@ -45,7 +45,7 @@
                 }
                 @if (Guid.Empty != post.Photo)
                 {
-                    var photoUrl = SummerPractice2021.Helpers.ImageHelper.GetUrl(post.Photo);
+                    var photoUrl = SummerPractice2021.Helpers.ImageHelper.GetUrl(guid: post.Photo);
                     @if (photoUrl != null)
                     {
                         <div>

@@ -30,7 +30,7 @@ namespace SummerPractice2021.Models
         [MaxLength(31)]
         public string FirstName { get; set; }
 
-        public Guid Photo { get; set; }
+        public Guid? Photo { get; set; }
 
         [MaxLength(255)]
         public string Contacts { get; set; }
