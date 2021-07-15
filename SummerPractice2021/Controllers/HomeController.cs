@@ -54,7 +54,7 @@ namespace SummerPractice2021.Controllers
                 }
 			}
 
-            news.AuthorId = 1;
+            news.AuthorId = Int32.Parse(HttpContext.Session.GetString("Id"));
             news.CreateDate = DateTime.Now;
 
             news.Photo = await ImageHelper.UploadImage(imageData);

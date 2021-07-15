@@ -10,35 +10,44 @@
 
     <div>
         <label asp-for="Nickname">Псевдоним</label>
-        <input type="text" asp-for="Nickname" />
+        <div data-placement="bottom" data-toggle="popover" data-content="Псевдоним может содержать от 3 до 20 символов: латиница, кириллица, цифры и подчёркивания">
+            <input type="text" asp-for="Nickname" autocomplete="off"/>
+        </div>
         <span asp-validation-for="Nickname"></span>
     </div>
 
     <div>
         <label asp-for="Email">Почта</label>
-        <input type="email" asp-for="Email" placeholder="example@ex.ru" />
+        <div data-placement="bottom" data-toggle="popover" data-content="Адрес почты не может быть длиннее 31 символа">
+            <input type="email" asp-for="Email" placeholder="example@ex.ru" autocomplete="off"/>
+        </div>
         <span asp-validation-for="Email"></span>
     </div>
 
     <div>
         <label asp-for="Password">Пароль</label>
-        <input type="password" asp-for="Password" />
+        <div data-placement="bottom" data-toggle="popover" data-content="Пароль должен содержать от 6 до 20 символов: латиница, цифры и подчёркивания">
+            <input type="password" asp-for="Password" />
+        </div>
+        <span asp-validation-for="Password"></span>
     </div>
 
     <div>
         <label asp-for="CheckPassword">Подтвердите пароль</label>
-        <input type="password" asp-for="CheckPassword" />
+        <div data-placement="bottom" data-toggle="popover" data-content="Пароль должен содержать от 6 до 20 символов: латиница, цифры и подчёркивания">
+            <input type="password" asp-for="CheckPassword" />
+        </div>
         <span asp-validation-for="CheckPassword"></span>
     </div>
 
     <div>
         <label asp-for="LastName">Фамилия</label>
-        <input type="text" asp-for="LastName" />
+        <input type="text" asp-for="LastName" autocomplete="off"/>
     </div>
 
     <div>
         <label asp-for="FirstName">Имя</label>
-        <input type="text" asp-for="FirstName" />
+        <input type="text" asp-for="FirstName" autocomplete="off"/>
     </div>
 
     <div>
@@ -52,17 +61,17 @@
 
     <div>
         <label asp-for="Contacts">Контактная информация</label>
-        <input type="text" asp-for="Contacts" />
+        <input type="text" asp-for="Contacts" autocomplete="off"/>
     </div>
 
     <div>
         <label asp-for="AboutMe">О себе</label>
-        <input type="text" asp-for="AboutMe" />
+        <input type="text" asp-for="AboutMe" autocomplete="off"/>
     </div>
 
     <div>
         <label asp-for="Achievements">Достижения</label>
-        <input type="text" asp-for="Achievements" />
+        <input type="text" asp-for="Achievements" autocomplete="off"/>
     </div>
 
     <div>
@@ -70,7 +79,7 @@
         <input type="submit" />
         <div class="validation" asp-validation-summary="ModelOnly"></div>
     </div>
-    
+
 </form>
 
 <div>

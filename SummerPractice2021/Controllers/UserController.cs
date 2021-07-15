@@ -49,6 +49,8 @@ namespace SummerPractice2021.Controllers
 
                     }
                     HttpContext.Session.SetString("Nickname", user.Nickname);
+                    var id = _dataContext.Users.First(x => x.Nickname == user.Nickname).Id.ToString();
+                    HttpContext.Session.SetString("Id", id);
 
                     return RedirectToAction("Index", "Home");
                 }

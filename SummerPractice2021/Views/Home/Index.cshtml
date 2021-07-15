@@ -11,7 +11,7 @@
         </div>
         <div>
             <label>Введите текст</label>
-            <input type="text" asp-for="Text" placeholder="Текст" />
+            <input type="text" asp-for="Text" placeholder="Текст" maxlength="4095"/>
             <input type="file" accept=".jpg,.jpeg,.png" class="hidden" name="imageData" />
             @if (ViewBag.FileError != null && ViewBag.FileError)
             {
@@ -27,9 +27,9 @@
     {
         <div style="border: solid; border-width: 1">
             <div>
-                @if (Guid.Empty != post.Author.Photo)
+                @if (Guid.Empty != post.Author.Photo && post.Author.Photo != null)
                 {
-                    <img src="@post.Author.Photo" height="30" style="border-radius: 50%" />
+                    <img src="@Url.Content(SummerPractice2021.Helpers.ImageHelper.GetUrl(guid: post.Author.Photo))" height="30" style="border-radius: 50%" />
                 }
                 else
                 {

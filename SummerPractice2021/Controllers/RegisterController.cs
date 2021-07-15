@@ -32,78 +32,91 @@ namespace SummerPractice2021.Controllers
         {
             var context = new DataContext();
 
-			var hasUserWithNickname = context.Users.Any(x => x.Nickname == user.Nickname);
-			var hasUserWithEmail = context.Users.Any(x => x.Email == user.Email);
-
-			var flag = false;
-
-			if (user.Password != user.CheckPassword)
+			if (ModelState.IsValid)
 			{
-				ModelState.AddModelError("CheckPassword", "Пароли не совпадают");
-				flag = true;
-			}
 
-			if (String.IsNullOrEmpty(user.Email) || String.IsNullOrEmpty(user.Nickname) || String.IsNullOrEmpty(user.Password) || String.IsNullOrEmpty(user.CheckPassword))
-			{
-				ModelState.AddModelError(string.Empty, "Заполнены не все обязательные поля!");
-				flag = true;
-			}
+				var hasUserWithNickname = context.Users.Any(x => x.Nickname == user.Nickname);
+				var hasUserWithEmail = context.Users.Any(x => x.Email == user.Email);
 
-			if (hasUserWithNickname)
-			{
-				ModelState.AddModelError("Nickname", "Такой псевдоним уже занят");
-				flag = true;
-			}
+				var flag = false;
 
-			if (hasUserWithEmail)
-			{
-				ModelState.AddModelError("Email", "Такая почта уже зарегистрирована");
-				flag = true;
-			}
-
-			if (flag)
-			{
-				return View("Register", user);
-			}
-
-			Guid? img = Guid.Empty;
-
-			if (imageData != null)
-			{
-				var extention = Path.GetExtension(imageData.FileName);
-				if (extention != ".jpg" && extention != ".jpeg" && extention != ".png")
+				if (user.Password != user.CheckPassword)
 				{
-					ViewBag.FileError = true;
+					ModelState.AddModelError("CheckPassword", "Пароли не совпадают");
+					flag = true;
+				}
+
+				if (String.IsNullOrEmpty(user.Email) || String.IsNullOrEmpty(user.Nickname) || String.IsNullOrEmpty(user.Password) || String.IsNullOrEmpty(user.CheckPassword))
+				{
+					ModelState.AddModelError(string.Empty, "Заполнены не все обязательные поля!");
+					flag = true;
+				}
+
+				if (hasUserWithNickname)
+				{
+					ModelState.AddModelError("Nickname", "Такой псевдоним уже занят");
+					flag = true;
+				}
+
+				if (hasUserWithEmail)
+				{
+					ModelState.AddModelError("Email", "Такая почта уже зарегистрирована");
+					flag = true;
+				}
+
+				if (flag)
+				{
 					return View("Register", user);
 				}
-				img = await ImageHelper.UploadImage(imageData);
+
+				Guid? img = Guid.Empty;
+
+				if (imageData != null)
+				{
+					var extention = Path.GetExtension(imageData.FileName);
+					if (extention != ".jpg" && extention != ".jpeg" && extention != ".png")
+					{
+						ViewBag.FileError = true;
+						return View("Register", user);
+					}
+					img = await ImageHelper.UploadImage(imageData);
+				}
+
+				var validatedUser = new User()
+				{
+					Nickname = user.Nickname,
+					Password = user.Password,
+					Email = user.Email,
+					FirstName = user.FirstName,
+					LastName = user.LastName,
+					Photo = img,
+					Achievements = user.Achievements,
+					AboutMe = user.AboutMe,
+					Contacts = user.Contacts
+				};
+
+				context.Users.Add(validatedUser);
+				context.SaveChanges();
+
+				await AuthenticationHelper.Authenticate(user.Nickname, true, HttpContext); // аутентификация
+
+				if (user.Photo.HasValue && Guid.Empty != user.Photo.Value)
+				{
+					HttpContext.Session.SetString("Photo", user.Photo.Value.ToString());
+				}
+				HttpContext.Session.SetString("Nickname", user.Nickname);
+				var id = context.Users.First(x => x.Nickname == user.Nickname).Id.ToString();
+				HttpContext.Session.SetString("Id", id);
+
+				return RedirectToAction("Index", "Home");
 			}
-
-			var validatedUser = new User()
+			else
 			{
-				Nickname = user.Nickname,
-				Password = user.Password,
-				Email = user.Email,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				Photo = img,
-				Achievements = user.Achievements,
-				AboutMe = user.AboutMe,
-				Contacts = user.Contacts
-			};
-
-			context.Users.Add(validatedUser);
-			context.SaveChanges();
-
-			await AuthenticationHelper.Authenticate(user.Nickname, true, HttpContext); // аутентификация
-
-			if (user.Photo.HasValue && Guid.Empty != user.Photo.Value)
-			{
-				HttpContext.Session.SetString("Photo", user.Photo.Value.ToString());
+				ModelState.AddModelError("Nickname", "Псевдоним может содержать от 3 до 20 символов: латиница, кириллица, цифры и подчёркивания");
+				ModelState.AddModelError("Password", "Пароль должен содержать от 6 до 20 символов: латиница, цифры и подчёркивания");
+				return View("Register", user);
 			}
-			HttpContext.Session.SetString("Nickname", user.Nickname);
-
-			return RedirectToAction("Index", "Home");
+			
 		}
     }
 }
