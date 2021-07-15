@@ -5,56 +5,116 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <form asp-controller="Home" asp-action="AddNewPost" method="post" enctype="multipart/form-data">
-        <div>
-            <span>Добавление новой записи</span>
-        </div>
-        <div>
-            <label>Введите текст</label>
-            <input type="text" asp-for="Text" placeholder="Текст" maxlength="4095"/>
-            <input type="file" accept=".jpg,.jpeg,.png" class="hidden" name="imageData" />
-            @if (ViewBag.FileError != null && ViewBag.FileError)
-            {
-                <label style="color: red">Неверный формат файла с изображением</label>
-            }
-            <input type="submit" />
-        </div>
-    </form>
+    <div class="border mt-2 mb-2 ml-2 mr-2">
+        <form asp-controller="Home" asp-action="AddNewPost" method="post" enctype="multipart/form-data">
+            <div style="background-color: #E5E5E5; height:30px ">
+                <span class="ml-2">Добавление новой записи</span>
+            </div>
+            <div class="ml-2 mr-2">
+                <div class="form-group">
+                    <label>Введите текст</label>
+                    <textarea class="form-control" rows="5" id="comment" maxlength="4095" type="text" asp-for="Text" placeholder="Текст"></textarea>
+                </div>
+                <label>Прикрепите изображение</label>
+                <div class="row">
+                    <div class="col-md-4 input-group mb-3" >
+                        <div class="input-group-append" >
+                            <input id="imageDataName" disabled class="form-control col-10" style="background-color: #FFFFFF" />
+                            <label class="btn btn-primary" style="background-color: #EFEFEF; color: #000000">
+                                Обзор...<input type="file" style="display: none;" id="imageData"
+                                               accept=".jpg,.jpeg,.png" name="imageData" onchange="onImageUpload()">
+                            </label>
+                        </div>
+                        @if (ViewBag.FileError != null && ViewBag.FileError)
+                        {
+                            <label style="color: red">Неверный формат файла с изображением</label>
+                        }
+                    </div>
+                    <div class="col-md-8">
+                        <button class="btn" style="background-color: #E5E5E5; float:right; border:solid 1px" width="50%" type="submit">Добавить</button>
+                    </div>
+                </div>
+
+
+            </div>
+        </form>
+    </div>
 }
 
-<div>
+
+<div class="container">
     @foreach (var post in ViewBag.Posts)
     {
-        <div style="border: solid; border-width: 1">
-            <div>
-                @if (Guid.Empty != post.Author.Photo && post.Author.Photo != null)
-                {
-                    <img src="@Url.Content(SummerPractice2021.Helpers.ImageHelper.GetUrl(guid: post.Author.Photo))" height="30" style="border-radius: 50%" />
-                }
-                else
-                {
-                    <img src="/img/defaultIcon.png" height="30" style="border-radius: 50%" />
-                }
-                <label>@post.Author.Nickname</label>
-                <label>@post.CreateDateLabel</label>
-            </div>
-            <div>
-                @if (!String.IsNullOrEmpty(post.Text))
-                {
-                    <label>@post.Text</label>
-                }
-                @if (Guid.Empty != post.Photo)
-                {
-                    var photoUrl = SummerPractice2021.Helpers.ImageHelper.GetUrl(guid: post.Photo);
-                    @if (photoUrl != null)
-                    {
-                        <div>
-                            <img src="@Url.Content(photoUrl)" width="50" />
+        <div class="row mt-5 mb-5 ml-1 mr-1">
+            <div class="container" style="background-color: #E5E5E5">
+                <div class="row">
+                    <div class="col-md-1 mt-1">
+                        @if (Guid.Empty != post.Author.Photo && post.Author.Photo != null)
+                        {
+                            <img src="@Url.Content(SummerPractice2021.Helpers.ImageHelper.GetUrl(guid: post.Author.Photo))" height="50" style="border:solid 1px black; border-radius: 50%" />
+                        }
+                        else
+                        {
+                            <img src="/img/defaultIcon.png" height="50" style="border-radius: 50%" />
+                        }
+                    </div>
+                    <div class="col-md-11">
+                        <div class="row">
+                            <label>@post.Author.Nickname</label>
                         </div>
-                    }
-                }
-
+                        <div class="row">
+                            <label>@post.CreateDateLabel</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        @if (!String.IsNullOrEmpty(post.Text))
+                        {
+                            <div class="row" style="background-color: #FFFFFF">
+                                <label class="ml-1">@post.Text</label>
+                            </div>
+                        }
+                        @if (Guid.Empty != post.Photo)
+                        {
+                            var photoUrl = SummerPractice2021.Helpers.ImageHelper.GetUrl(guid: post.Photo);
+                            @if (photoUrl != null)
+                            {
+                                <div class="row" style="background-color: #FFFFFF">
+                                    <img src="@Url.Content(photoUrl)" width="100%" />
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="row mt-4"></div>
             </div>
         </div>
     }
 </div>
+
+<script type="text/javascript">
+    function stoppedTyping(){
+        if (document.getElementById("postText").value === ""
+            && document.getElementById("imageData").value === "") {
+            document.getElementById('save_button').disabled = true;
+        } else {
+            document.getElementById('save_button').disabled = false;
+        }
+    }
+    function onImageUpload(){
+        if (document.getElementById("postText").value === ""
+            && document.getElementById("imageData").value === "") {
+            document.getElementById('save_button').disabled = true;
+        } else {
+            document.getElementById('save_button').disabled = false;
+        }
+
+        if (document.getElementById('imageData')
+            && document.getElementById('imageData').files
+            && document.getElementById('imageData').files[0].name !== "") {
+            document.getElementById("imageDataName").value
+                = "...\\" + document.getElementById('imageData').files[0].name;
+        }
+    }
+</script>
