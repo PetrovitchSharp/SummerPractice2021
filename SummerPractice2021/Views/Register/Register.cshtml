@@ -3,86 +3,155 @@
 }
 @model UserViewModel
 
-<form asp-controller="Register" asp-action="AddNewUser" method="post" enctype="multipart/form-data">
-    <div>
-        <span>Регистрация нового пользователя</span>
-    </div>
+<div class="row justify-content-center">
+        <form asp-controller="Register" asp-action="AddNewUser" method="post" enctype="multipart/form-data">
+            <div class="card mt-3 mb-3" style="margin:auto">
+                <div class="card-header">
+                    <span>Регистрация нового пользователя</span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-mb-9" style="margin-left:40px">
+                            <div class="form-group">
+                                <div class="row  justify-content-center">
+                                    <label asp-for="Nickname" class="text-secondary">Псевдоним</label>
+                                </div>
+                                <div class="row  justify-content-center">
+                                    <div data-placement="bottom" data-toggle="popover" data-content="Псевдоним может содержать от 3 до 20 символов: латиница, кириллица, цифры и подчёркивания">
+                                        <input type="text" asp-for="Nickname" class="rounded" style="border: solid 1px #C7D2D9" autocomplete="off" />
+                                    </div>
+                                    <span asp-validation-for="Nickname"></span>
+                                </div>
+                            </div>
 
-    <div>
-        <label asp-for="Nickname">Псевдоним</label>
-        <div data-placement="bottom" data-toggle="popover" data-content="Псевдоним может содержать от 3 до 20 символов: латиница, кириллица, цифры и подчёркивания">
-            <input type="text" asp-for="Nickname" autocomplete="off"/>
-        </div>
-        <span asp-validation-for="Nickname"></span>
-    </div>
+                            <div class="form-group">
+                                <div class="row  justify-content-center">
+                                    <label asp-for="Email" class="text-secondary">Почта</label>
+                                </div>
+                                <div class="row  justify-content-center">
+                                    <div data-placement="bottom" data-toggle="popover" data-content="Адрес почты не может быть длиннее 31 символа">
+                                        <input type="email" asp-for="Email" class="rounded" style="border: solid 1px #C7D2D9" placeholder="example@ex.ru" autocomplete="off" />
+                                    </div>
+                                    <span asp-validation-for="Email"></span>
+                                </div>
+                            </div>
 
-    <div>
-        <label asp-for="Email">Почта</label>
-        <div data-placement="bottom" data-toggle="popover" data-content="Адрес почты не может быть длиннее 31 символа">
-            <input type="email" asp-for="Email" placeholder="example@ex.ru" autocomplete="off"/>
-        </div>
-        <span asp-validation-for="Email"></span>
-    </div>
+                            <div class="form-group">
+                                <div class="row  justify-content-center">
+                                    <label asp-for="Password" class="text-secondary">Пароль</label>
+                                </div>
+                                <div class="row  justify-content-center">
+                                    <div data-placement="bottom" data-toggle="popover" data-content="Пароль должен содержать от 6 до 20 символов: латиница, цифры и подчёркивания">
+                                        <input type="password" asp-for="Password" class="rounded" style="border: solid 1px #C7D2D9" />
+                                    </div>
+                                    <span asp-validation-for="Password"></span>
+                                </div>
+                            </div>
 
-    <div>
-        <label asp-for="Password">Пароль</label>
-        <div data-placement="bottom" data-toggle="popover" data-content="Пароль должен содержать от 6 до 20 символов: латиница, цифры и подчёркивания">
-            <input type="password" asp-for="Password" />
-        </div>
-        <span asp-validation-for="Password"></span>
-    </div>
+                            <div class="form-group">
+                                <div class="row  justify-content-center">
+                                    <label asp-for="CheckPassword" class="text-secondary">Подтвердите пароль</label>
+                                </div>
+                                <div class="row  justify-content-center">
+                                    <div data-placement="bottom" data-toggle="popover" data-content="Пароль должен содержать от 6 до 20 символов: латиница, цифры и подчёркивания">
+                                        <input type="password" asp-for="CheckPassword" class="rounded" style="border: solid 1px #C7D2D9" />
+                                    </div>
+                                    <span asp-validation-for="CheckPassword"></span>
+                                </div>
+                            </div>
 
-    <div>
-        <label asp-for="CheckPassword">Подтвердите пароль</label>
-        <div data-placement="bottom" data-toggle="popover" data-content="Пароль должен содержать от 6 до 20 символов: латиница, цифры и подчёркивания">
-            <input type="password" asp-for="CheckPassword" />
-        </div>
-        <span asp-validation-for="CheckPassword"></span>
-    </div>
+                            <div class="form-group">
+                                <div class="row  justify-content-center">
+                                    <label asp-for="LastName" class="text-secondary">Фамилия</label>
+                                </div>
+                                <div class="row  justify-content-center">
+                                    <input type="text" asp-for="LastName" autocomplete="off" class="rounded" style="border: solid 1px #C7D2D9" />
+                                </div>
+                            </div>
 
-    <div>
-        <label asp-for="LastName">Фамилия</label>
-        <input type="text" asp-for="LastName" autocomplete="off"/>
-    </div>
+                            <div class="form-group">
+                                <div class="row  justify-content-center">
+                                    <label asp-for="FirstName" class="text-secondary">Имя</label>
+                                </div>
+                                <div class="row  justify-content-center">
+                                    <input type="text" asp-for="FirstName" autocomplete="off" class="rounded" style="border: solid 1px #C7D2D9" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-mb-3">
+                            <img id="viewPhoto" style="height:440px;width:260px; border:solid 1px #CDCDCD; margin-left:35px; margin-right:20px" src="~/img/Uploads/41d39c6c-0fdd-4c54-ad1b-e06840a4363b.jpg" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row  justify-content-center">
+                            <label asp-for="Photo" class="text-secondary">Выберите фото</label>
+                        </div>
+                        <div class="row  justify-content-center">
+                            <div class="input-group-append" style="width:90%">
+                                <input id="imageDataName" disabled class="form-control col-10" style="background-color: #FFFFFF" />
+                                <label class="btn btn-primary" style="background-color: #EFEFEF; color: #000000">
+                                    Обзор...<input type="file" style="display: none;" id="imageData"
+                                                   accept=".jpg,.jpeg,.png" name="imageData" onchange="onImageUpload()">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
 
-    <div>
-        <label asp-for="FirstName">Имя</label>
-        <input type="text" asp-for="FirstName" autocomplete="off"/>
-    </div>
+                    <div class="form-group">
+                        <div class="row  justify-content-center">
+                            <label asp-for="Contacts" class="text-secondary">Контактная информация</label>
+                        </div>
+                        <div class="row  justify-content-center">
+                            <input type="text" asp-for="Contacts" style="width: 90%; border: solid 1px #C7D2D9" autocomplete="off" class="rounded" />
+                        </div>
+                    </div>
 
-    <div>
-        <label asp-for="Photo">Выберите фото</label>
-        <input type="file" accept=".jpg,.jpeg,.png" class="hidden" name="imageData" />
-        @if (ViewBag.FileError != null && ViewBag.FileError)
-        {
-            <label style="color: red">Неверный формат файла с изображением</label>
-        }
-    </div>
+                    <div class="form-group">
+                        <div class="row  justify-content-center">
+                            <label asp-for="AboutMe" class="text-secondary">О себе</label>
+                        </div>
+                        <div class="row  justify-content-center">
+                            <input type="text" asp-for="AboutMe" style="width: 90%; border: solid 1px #C7D2D9" autocomplete="off" class="rounded" />
+                        </div>
+                    </div>
 
-    <div>
-        <label asp-for="Contacts">Контактная информация</label>
-        <input type="text" asp-for="Contacts" autocomplete="off"/>
-    </div>
+                    <div class="form-group">
+                        <div class="row  justify-content-center">
+                            <label asp-for="Achievements" class="text-secondary">Достижения</label>
+                        </div>
+                        <div class="row  justify-content-center">
+                            <input type="text" asp-for="Achievements" style="width: 90%; border: solid 1px #C7D2D9" autocomplete="off" class="rounded" />
+                        </div>
+                    </div>
 
-    <div>
-        <label asp-for="AboutMe">О себе</label>
-        <input type="text" asp-for="AboutMe" autocomplete="off"/>
-    </div>
-
-    <div>
-        <label asp-for="Achievements">Достижения</label>
-        <input type="text" asp-for="Achievements" autocomplete="off"/>
-    </div>
-
-    <div>
-        <p>* - поля, обязательные для заполнения</p>
-        <input type="submit" />
-        <div class="validation" asp-validation-summary="ModelOnly"></div>
-    </div>
-
-</form>
-
-<div>
-    <p>Уже есть аккаунт?</p>
-    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Войти</a>
+                    <div class="form-group">
+                        <div class="row  justify-content-center">
+                            <p>* - поля, обязательные для заполнения</p>
+                            <button class="btn ml-3 justify-content-cente" style="background-color: #EFEFEF; float: right; border: solid 1px #C7D2D9" width="50%" type="submit">Зарегистрироваться</button>
+                            <div class="validation" asp-validation-summary="ModelOnly"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
 </div>
+
+<div class="row justify-content-center">
+    <p>Уже есть аккаунт?</p>
+    <button class="btn ml-3" style="background-color: #E5E5E5; float: right; border: solid 1px #C7D2D9" width="50%" asp-area="" asp-controller="User" asp-action="Login">Войти</button>
+</div>
+
+
+<script type="text/javascript">
+    function onImageUpload() {
+        if (document.getElementById('imageData')
+            && document.getElementById('imageData').files
+            && document.getElementById('imageData').files[0].name !== "")
+        {
+            document.getElementById("imageDataName").value
+                = "...\\" + document.getElementById('imageData').files[0].name;
+            document.getElementById("viewPhoto").src = URL.createObjectURL(document.getElementById('imageData').files[0]);
+
+        }
+    }
+</script>

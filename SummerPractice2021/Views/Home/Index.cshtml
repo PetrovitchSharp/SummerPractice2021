@@ -3,7 +3,7 @@
 }
 @model News
 
-@if (User.Identity.IsAuthenticated)
+@*@if (User.Identity.IsAuthenticated)
 {
     <div class="border mt-2 mb-2 ml-2 mr-2">
         <form asp-controller="Home" asp-action="AddNewPost" method="post" enctype="multipart/form-data">
@@ -17,8 +17,8 @@
                 </div>
                 <label>Прикрепите изображение</label>
                 <div class="row">
-                    <div class="col-md-4 input-group mb-3" >
-                        <div class="input-group-append" >
+                    <div class="col-md-4 input-group mb-3">
+                        <div class="input-group-append">
                             <input id="imageDataName" disabled class="form-control col-10" style="background-color: #FFFFFF" />
                             <label class="btn btn-primary" style="background-color: #EFEFEF; color: #000000">
                                 Обзор...<input type="file" style="display: none;" id="imageData"
@@ -39,16 +39,51 @@
             </div>
         </form>
     </div>
-}
+}*@
 
+@if (User.Identity.IsAuthenticated)
+{
+    <form asp-controller="Home" asp-action="AddNewPost" method="post" enctype="multipart/form-data">
+        <div class="card mt-3 mb-3">
+            <div class="card-header">
+                <span class="ml-2">Добавление новой записи</span>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Введите текст</label>
+                    <textarea class="form-control" rows="5" id="comment" maxlength="4095" type="text" asp-for="Text" placeholder="Текст"></textarea>
+                </div>
+                <label>Прикрепите изображение</label>
+                <div class="row">
+                    <div class="col-md-4 input-group mb-3">
+                        <div class="input-group-append">
+                            <input id="imageDataName" disabled class="form-control col-10" style="background-color: #FFFFFF" />
+                            <label class="btn btn-primary" style="background-color: #EFEFEF; color: #000000">
+                                Обзор...<input type="file" style="display: none;" id="imageData"
+                                               accept=".jpg,.jpeg,.png" name="imageData" onchange="onImageUpload()">
+                            </label>
+                        </div>
+                        @if (ViewBag.FileError != null && ViewBag.FileError)
+                        {
+                            <label style="color: red">Неверный формат файла с изображением</label>
+                        }
+                    </div>
+                    <div class="col-md-8">
+                        <button class="btn" style="background-color: #E5E5E5; float:right; border:solid 1px" width="50%" type="submit">Добавить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+}
 
 <div class="container">
     @foreach (var post in ViewBag.Posts)
     {
-        <div class="row mt-5 mb-5 ml-1 mr-1">
-            <div class="container" style="background-color: #E5E5E5">
+        <div class="card mt-3 mb-3">
+            <div class="card-header">
                 <div class="row">
-                    <div class="col-md-1 mt-1">
+                    <div class="col-md-1">
                         @if (Guid.Empty != post.Author.Photo && post.Author.Photo != null)
                         {
                             <img src="@Url.Content(SummerPractice2021.Helpers.ImageHelper.GetUrl(guid: post.Author.Photo))" height="50" style="border:solid 1px black; border-radius: 50%" />
@@ -67,8 +102,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="card-body">
                 <div class="row">
-                    <div class="col">
+                    <div class="col ml-1 mr-1">
                         @if (!String.IsNullOrEmpty(post.Text))
                         {
                             <div class="row" style="background-color: #FFFFFF">
@@ -87,29 +124,16 @@
                         }
                     </div>
                 </div>
-                <div class="row mt-4"></div>
+            </div>
+            <div class="card-footer">
+
             </div>
         </div>
     }
 </div>
 
 <script type="text/javascript">
-    function stoppedTyping(){
-        if (document.getElementById("postText").value === ""
-            && document.getElementById("imageData").value === "") {
-            document.getElementById('save_button').disabled = true;
-        } else {
-            document.getElementById('save_button').disabled = false;
-        }
-    }
-    function onImageUpload(){
-        if (document.getElementById("postText").value === ""
-            && document.getElementById("imageData").value === "") {
-            document.getElementById('save_button').disabled = true;
-        } else {
-            document.getElementById('save_button').disabled = false;
-        }
-
+    function onImageUpload() {
         if (document.getElementById('imageData')
             && document.getElementById('imageData').files
             && document.getElementById('imageData').files[0].name !== "") {
